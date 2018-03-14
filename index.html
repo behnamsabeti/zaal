@@ -231,16 +231,19 @@
                     <a href="#general-format" class="toc-h2 toc-link" data-title="general-format">General Format</a>
                   </li>
                   <li>
+                    <a href="#document-classifier" class="toc-h2 toc-link" data-title="document-classifier">Document Classifier</a>
+                  </li>
+                  <li>
                     <a href="#ducument-level-sentiment-analysis" class="toc-h2 toc-link" data-title="ducument-level-sentiment-analysis">Ducument Level Sentiment Analysis</a>
                   </li>
                   <li>
                     <a href="#aspect-based-sentiment-analyzer" class="toc-h2 toc-link" data-title="aspect-based-sentiment-analyzer">Aspect Based Sentiment Analyzer</a>
                   </li>
                   <li>
-                    <a href="#document-classifier" class="toc-h2 toc-link" data-title="document-classifier">Document Classifier</a>
+                    <a href="#word-suggester" class="toc-h2 toc-link" data-title="word-suggester">Word Suggester</a>
                   </li>
                   <li>
-                    <a href="#word-suggester" class="toc-h2 toc-link" data-title="word-suggester">Word Suggester</a>
+                    <a href="#keyword-extractor" class="toc-h2 toc-link" data-title="keyword-extractor">Keyword Extractor</a>
                   </li>
               </ul>
           </li>
@@ -296,7 +299,23 @@
 <p>Welcome to Zaal API! You can use our API to access Zaal API endpoints.
 Zaal is a Natural Language Processing (NLP) service for real world applciations. The first NLP service for Persian Laguage. </p>
 
-<p>Persian language could be considered a major langauge in the family of Indo-Eaurpean languages where its native speakers and people who speak Persian as a second lanaguge add up to 110M people. Despite the vast population of Persian speakers there are not many resources for processing Persian documents in the field of Natural Language Processing (NLP). With this incentive we at Miras decided to start a project aiming at provinding an NLP web service with real world applicatons.</p>
+<p>Persian language could be considered a major langauge in the family of Indo-Eaurpean languages where its native speakers and people who speak Persian as a second lanaguge add up to 110M people. Despite the vast population of Persian speakers there are not many resources for processing Persian documents in the field of Natural Language Processing (NLP). With this incentive we at Miras decided to start a project aiming at provinding an NLP web service with real world applicatons. </p>
+
+<p>Zaal currently supprots the following tasks:
+<ul>
+  <li>Document Classifier</li>
+  <li>Document Level Sentiment Analysis</li>
+  <li>Aspect Based Sentiment Analysis</li>
+  <li>Similar Word Suggester</li>
+  <li>Keyword Extractor</li>
+</ul></p>
+
+<p>And we plan to support these tasks in the upcoming version:
+<ul>
+  <li>Event Extractor</li>
+  <li>Named Entity Recognizer</li>
+  <li>Summarizer</li>
+</ul></p>
 <h1 id='restful-api'>RESTful API</h1><h2 id='general-format'>General Format</h2>
 <p>Apart from the request for getting the version of the service all other methods are of type POST request.</p>
 <h3 id='http-request'>HTTP Request</h3>
@@ -326,6 +345,174 @@ Zaal is a Natural Language Processing (NLP) service for real world applciations.
 <td>Inputs for METHOD.</td>
 </tr>
 </tbody></table>
+<h2 id='document-classifier'>Document Classifier</h2><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s1">'uri'</span>
+<span class="nb">require</span> <span class="s1">'net/http'</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="no">URI</span><span class="p">(</span><span class="s2">"http://localhost:9091/Zaal/api"</span><span class="p">)</span>
+
+<span class="n">http</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">url</span><span class="p">.</span><span class="nf">host</span><span class="p">,</span> <span class="n">url</span><span class="p">.</span><span class="nf">port</span><span class="p">)</span>
+
+<span class="n">request</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">::</span><span class="no">Post</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+<span class="n">request</span><span class="p">[</span><span class="s2">"Content-Type"</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'application/json'</span>
+<span class="n">request</span><span class="p">.</span><span class="nf">body</span> <span class="o">=</span> <span class="s2">"{</span><span class="se">\n</span><span class="s2">   </span><span class="se">\"</span><span class="s2">method</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">document_classifier</span><span class="se">\"</span><span class="s2">,</span><span class="se">\n</span><span class="s2">   </span><span class="se">\"</span><span class="s2">args</span><span class="se">\"</span><span class="s2">:{</span><span class="se">\n</span><span class="s2">      </span><span class="se">\"</span><span class="s2">document</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">رهبر انقلاب در دیدار با اعضایشورای عالی انقلاب فرهنگی، بر ضرورت تبیین مسیر دقیق فرهتگ تاکید کردند </span><span class="se">\"\n</span><span class="s2">   }</span><span class="se">\n</span><span class="s2">}"</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">http</span><span class="p">.</span><span class="nf">request</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+<span class="nb">puts</span> <span class="n">response</span><span class="p">.</span><span class="nf">read_body</span>
+</code></pre><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="s">"http://localhost:9091/Zaal/api"</span>
+
+<span class="n">payload</span> <span class="o">=</span> <span class="s">"{</span><span class="se">\n</span><span class="s">   </span><span class="se">\"</span><span class="s">method</span><span class="se">\"</span><span class="s">:</span><span class="se">\"</span><span class="s">document_classifier</span><span class="se">\"</span><span class="s">,</span><span class="se">\n</span><span class="s">   </span><span class="se">\"</span><span class="s">args</span><span class="se">\"</span><span class="s">:{</span><span class="se">\n</span><span class="s">      </span><span class="se">\"</span><span class="s">document</span><span class="se">\"</span><span class="s">:</span><span class="se">\"</span><span class="s">رهبر انقلاب در دیدار با اعضایشورای عالی انقلاب فرهنگی، بر ضرورت تبیین مسیر دقیق فرهتگ تاکید کردند </span><span class="se">\"\n</span><span class="s">   }</span><span class="se">\n</span><span class="s">}"</span>
+<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s">'Content-Type'</span><span class="p">:</span> <span class="s">'application/json'</span><span class="p">}</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s">"POST"</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</code></pre><pre class="highlight shell tab-shell"><code>curl --request POST <span class="se">\</span>
+  --url http://localhost:9091/Zaal/api <span class="se">\</span>
+  --header <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
+  --data <span class="s1">'{
+   "method":"document_classifier",
+   "args":{
+      "document":"رهبر انقلاب در دیدار با اعضایشورای عالی انقلاب فرهنگی، بر ضرورت تبیین مسیر دقیق فرهتگ تاکید کردند "
+   }
+}'</span>
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="kd">var</span> <span class="nx">settings</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s2">"async"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="s2">"crossDomain"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="s2">"url"</span><span class="p">:</span> <span class="s2">"http://localhost:9091/Zaal/api"</span><span class="p">,</span>
+  <span class="s2">"method"</span><span class="p">:</span> <span class="s2">"POST"</span><span class="p">,</span>
+  <span class="s2">"headers"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">"Content-Type"</span><span class="p">:</span> <span class="s2">"application/json"</span>
+  <span class="p">},</span>
+  <span class="s2">"processData"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+  <span class="s2">"data"</span><span class="p">:</span> <span class="s2">"{\n   \"method\":\"document_classifier\",\n   \"args\":{\n      \"document\":\"رهبر انقلاب در دیدار با اعضایشورای عالی انقلاب فرهنگی، بر ضرورت تبیین مسیر دقیق فرهتگ تاکید کردند \"\n   }\n}"</span>
+<span class="p">}</span>
+
+<span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">(</span><span class="nx">settings</span><span class="p">).</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"results"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"pay_load"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"Culture_Art"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"Politics_Internal"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.1203</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"Sports"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0078</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"Entertainment"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"Social_Security"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"Social_Family"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"Industry_Banking"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"Culture_Tourism"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"Culture_Religion"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.4811</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"Economy"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"Industry_Technology"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"Industry_Production"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"Industry_Transportation"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"Industry_Real State"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"Social_Education"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"Industry_Automoblie Manufacturing"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"Industry_Insurance"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"Politics_Foreign"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0697</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"Social_Urban"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"Medical"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>A document as a in news articles can be classified based the different topics it addresses. In Zaal we use a multi-label classifcation where each document can be assinged a set of problaistic scores representing the possiblities of belonging to various classes.</p>
+
+<p>Supported classes are:
+<table class="table table-striped table-bordered" style="margin-left: auto; margin-right: auto;">
+<tbody>
+<tr>
+<th style="text-align: center;">Industry</th>
+<th style="text-align: center;">Politics</th>
+<th style="text-align: center;">Culture</th>
+<th style="text-align: center;">Social</th>
+<th style="text-align: center;">Sports</th>
+<th style="text-align: center;">Entertainment</th>
+<th style="text-align: center;">Economy</th>
+<th style="text-align: center;">Medical</th>
+</tr>
+<tr style="text-align: center;">
+<td>Insurance</td>
+<td>Internal</td>
+<td>Tourism</td>
+<td>Education</td>
+<td>Sports</td>
+<td>Entertainment</td>
+<td>Economy</td>
+<td>Medical</td>
+</tr>
+<tr style="text-align: center;">
+<td>Transportation</td>
+<td>Foreign</td>
+<td>Art</td>
+<td>Urban</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr style="text-align: center;">
+<td>Production</td>
+<td>&nbsp;</td>
+<td>Religion</td>
+<td>Security</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr style="text-align: center;">
+<td>Automoblie Manufacturing</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Family</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr style="text-align: center;">
+<td>Banking</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr style="text-align: center;">
+<td>Real State</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr style="text-align: center;">
+<td>Technology</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table></p>
+
+<p>We are working on a mechanism for the user to define custom classes which will be released in the upcomming version.</p>
 <h2 id='ducument-level-sentiment-analysis'>Ducument Level Sentiment Analysis</h2><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s1">'uri'</span>
 <span class="nb">require</span> <span class="s1">'net/http'</span>
 
@@ -450,86 +637,6 @@ Zaal is a Natural Language Processing (NLP) service for real world applciations.
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>There could be mutiple segments of a document where each segment has its own sentiment score. This happens  whenever there are various aspects of an entity or a concept in a document. For example a comment about a new Samsung cellphone could contain a compelment about its colour and also some complaints about its high price.  </p>
-<h2 id='document-classifier'>Document Classifier</h2><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s1">'uri'</span>
-<span class="nb">require</span> <span class="s1">'net/http'</span>
-
-<span class="n">url</span> <span class="o">=</span> <span class="no">URI</span><span class="p">(</span><span class="s2">"http://localhost:9091/Zaal/api"</span><span class="p">)</span>
-
-<span class="n">http</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">url</span><span class="p">.</span><span class="nf">host</span><span class="p">,</span> <span class="n">url</span><span class="p">.</span><span class="nf">port</span><span class="p">)</span>
-
-<span class="n">request</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">::</span><span class="no">Post</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
-<span class="n">request</span><span class="p">[</span><span class="s2">"Content-Type"</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'application/json'</span>
-<span class="n">request</span><span class="p">.</span><span class="nf">body</span> <span class="o">=</span> <span class="s2">"{</span><span class="se">\n</span><span class="s2">   </span><span class="se">\"</span><span class="s2">method</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">document_classifier</span><span class="se">\"</span><span class="s2">,</span><span class="se">\n</span><span class="s2">   </span><span class="se">\"</span><span class="s2">args</span><span class="se">\"</span><span class="s2">:{</span><span class="se">\n</span><span class="s2">      </span><span class="se">\"</span><span class="s2">document</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">رهبر انقلاب در دیدار با اعضایشورای عالی انقلاب فرهنگی، بر ضرورت تبیین مسیر دقیق فرهتگ تاکید کردند </span><span class="se">\"\n</span><span class="s2">   }</span><span class="se">\n</span><span class="s2">}"</span>
-
-<span class="n">response</span> <span class="o">=</span> <span class="n">http</span><span class="p">.</span><span class="nf">request</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
-<span class="nb">puts</span> <span class="n">response</span><span class="p">.</span><span class="nf">read_body</span>
-</code></pre><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">requests</span>
-
-<span class="n">url</span> <span class="o">=</span> <span class="s">"http://localhost:9091/Zaal/api"</span>
-
-<span class="n">payload</span> <span class="o">=</span> <span class="s">"{</span><span class="se">\n</span><span class="s">   </span><span class="se">\"</span><span class="s">method</span><span class="se">\"</span><span class="s">:</span><span class="se">\"</span><span class="s">document_classifier</span><span class="se">\"</span><span class="s">,</span><span class="se">\n</span><span class="s">   </span><span class="se">\"</span><span class="s">args</span><span class="se">\"</span><span class="s">:{</span><span class="se">\n</span><span class="s">      </span><span class="se">\"</span><span class="s">document</span><span class="se">\"</span><span class="s">:</span><span class="se">\"</span><span class="s">رهبر انقلاب در دیدار با اعضایشورای عالی انقلاب فرهنگی، بر ضرورت تبیین مسیر دقیق فرهتگ تاکید کردند </span><span class="se">\"\n</span><span class="s">   }</span><span class="se">\n</span><span class="s">}"</span>
-<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s">'Content-Type'</span><span class="p">:</span> <span class="s">'application/json'</span><span class="p">}</span>
-
-<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s">"POST"</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
-
-<span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
-</code></pre><pre class="highlight shell tab-shell"><code>curl --request POST <span class="se">\</span>
-  --url http://localhost:9091/Zaal/api <span class="se">\</span>
-  --header <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
-  --data <span class="s1">'{
-   "method":"document_classifier",
-   "args":{
-      "document":"رهبر انقلاب در دیدار با اعضایشورای عالی انقلاب فرهنگی، بر ضرورت تبیین مسیر دقیق فرهتگ تاکید کردند "
-   }
-}'</span>
-</code></pre><pre class="highlight javascript tab-javascript"><code><span class="kd">var</span> <span class="nx">settings</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="s2">"async"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-  <span class="s2">"crossDomain"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-  <span class="s2">"url"</span><span class="p">:</span> <span class="s2">"http://localhost:9091/Zaal/api"</span><span class="p">,</span>
-  <span class="s2">"method"</span><span class="p">:</span> <span class="s2">"POST"</span><span class="p">,</span>
-  <span class="s2">"headers"</span><span class="p">:</span> <span class="p">{</span>
-    <span class="s2">"Content-Type"</span><span class="p">:</span> <span class="s2">"application/json"</span>
-  <span class="p">},</span>
-  <span class="s2">"processData"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
-  <span class="s2">"data"</span><span class="p">:</span> <span class="s2">"{\n   \"method\":\"document_classifier\",\n   \"args\":{\n      \"document\":\"رهبر انقلاب در دیدار با اعضایشورای عالی انقلاب فرهنگی، بر ضرورت تبیین مسیر دقیق فرهتگ تاکید کردند \"\n   }\n}"</span>
-<span class="p">}</span>
-
-<span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">(</span><span class="nx">settings</span><span class="p">).</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
-<span class="p">});</span>
-</code></pre>
-<blockquote>
-<p>The above command returns JSON structured like this:</p>
-</blockquote>
-<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="s2">"results"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="s2">"pay_load"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-            </span><span class="s2">"Culture_Art"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"Politics_Internal"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.1203</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"Sports"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0078</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"Entertainment"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"Social_Security"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"Social_Family"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"Industry_Banking"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"Culture_Tourism"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"Culture_Religion"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.4811</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"Economy"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"Industry_Technology"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"Industry_Production"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"Industry_Transportation"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"Industry_Real State"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"Social_Education"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"Industry_Automoblie Manufacturing"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"Industry_Insurance"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"Politics_Foreign"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0697</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"Social_Urban"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"Medical"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
-        </span><span class="p">},</span><span class="w">
-        </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="w">
-    </span><span class="p">}</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
-<p>A document as a in news articles can be classified based the different topics it addresses. In Zaal we use a multi-label classifcation where each document can be assinged a set of problaistic scores representing the possiblities of belonging to various classes.</p>
 <h2 id='word-suggester'>Word Suggester</h2><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s1">'uri'</span>
 <span class="nb">require</span> <span class="s1">'net/http'</span>
 
@@ -601,6 +708,68 @@ Zaal is a Natural Language Processing (NLP) service for real world applciations.
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>One application of NLP is to extract synonyms of a word. Using this method you could get the k-nearest words similar to your word. </p>
+<h2 id='keyword-extractor'>Keyword Extractor</h2><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s1">'uri'</span>
+<span class="nb">require</span> <span class="s1">'net/http'</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="no">URI</span><span class="p">(</span><span class="s2">"http://localhost:9091/Zaal/api"</span><span class="p">)</span>
+
+<span class="n">http</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">url</span><span class="p">.</span><span class="nf">host</span><span class="p">,</span> <span class="n">url</span><span class="p">.</span><span class="nf">port</span><span class="p">)</span>
+
+<span class="n">request</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">::</span><span class="no">Post</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+<span class="n">request</span><span class="p">[</span><span class="s2">"Content-Type"</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'application/json'</span>
+<span class="n">request</span><span class="p">.</span><span class="nf">body</span> <span class="o">=</span> <span class="s2">"{</span><span class="se">\n</span><span class="s2">   </span><span class="se">\"</span><span class="s2">method</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">keyword_extractor</span><span class="se">\"</span><span class="s2">,</span><span class="se">\n</span><span class="s2">   </span><span class="se">\"</span><span class="s2">args</span><span class="se">\"</span><span class="s2">:{</span><span class="se">\n</span><span class="s2">      </span><span class="se">\"</span><span class="s2">document</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">رهبر انقلاب در دیدار با اعضایشورای عالی انقلاب فرهنگی، بر ضرورت تبیین مسیر دقیق فرهتگ تاکید کردند </span><span class="se">\"\n</span><span class="s2">   }</span><span class="se">\n</span><span class="s2">}"</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">http</span><span class="p">.</span><span class="nf">request</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+<span class="nb">puts</span> <span class="n">response</span><span class="p">.</span><span class="nf">read_body</span>
+</code></pre><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="s">"http://localhost:9091/Zaal/api"</span>
+
+<span class="n">payload</span> <span class="o">=</span> <span class="s">"{</span><span class="se">\n</span><span class="s">   </span><span class="se">\"</span><span class="s">method</span><span class="se">\"</span><span class="s">:</span><span class="se">\"</span><span class="s">keyword_extractor</span><span class="se">\"</span><span class="s">,</span><span class="se">\n</span><span class="s">   </span><span class="se">\"</span><span class="s">args</span><span class="se">\"</span><span class="s">:{</span><span class="se">\n</span><span class="s">      </span><span class="se">\"</span><span class="s">document</span><span class="se">\"</span><span class="s">:</span><span class="se">\"</span><span class="s">رهبر انقلاب در دیدار با اعضایشورای عالی انقلاب فرهنگی، بر ضرورت تبیین مسیر دقیق فرهتگ تاکید کردند </span><span class="se">\"\n</span><span class="s">   }</span><span class="se">\n</span><span class="s">}"</span>
+<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s">'Content-Type'</span><span class="p">:</span> <span class="s">'application/json'</span><span class="p">}</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s">"POST"</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</code></pre><pre class="highlight shell tab-shell"><code>curl --request POST <span class="se">\</span>
+  --url http://localhost:9091/Zaal/api <span class="se">\</span>
+  --header <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
+  --data <span class="s1">'{
+   "method":"keyword_extractor",
+   "args":{
+      "document":"رهبر انقلاب در دیدار با اعضایشورای عالی انقلاب فرهنگی، بر ضرورت تبیین مسیر دقیق فرهتگ تاکید کردند "
+   }
+}'</span>
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="kd">var</span> <span class="nx">settings</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s2">"async"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="s2">"crossDomain"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="s2">"url"</span><span class="p">:</span> <span class="s2">"http://localhost:9091/Zaal/api"</span><span class="p">,</span>
+  <span class="s2">"method"</span><span class="p">:</span> <span class="s2">"POST"</span><span class="p">,</span>
+  <span class="s2">"headers"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">"Content-Type"</span><span class="p">:</span> <span class="s2">"application/json"</span>
+  <span class="p">},</span>
+  <span class="s2">"processData"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+  <span class="s2">"data"</span><span class="p">:</span> <span class="s2">"{\n   \"method\":\"keyword_extractor\",\n   \"args\":{\n      \"document\":\"رهبر انقلاب در دیدار با اعضایشورای عالی انقلاب فرهنگی، بر ضرورت تبیین مسیر دقیق فرهتگ تاکید کردند \"\n   }\n}"</span>
+<span class="p">}</span>
+
+<span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">(</span><span class="nx">settings</span><span class="p">).</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"results"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"pay_load"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"انقلاب"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0191</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"شورای"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0084</span><span class="p">,</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>Keyword extractor (as the name suggests) extracts the most important words from a given text. This method extracts keywords and an importance score associated with each keyword from text.</p>
 
       </div>
       <div class="dark-box">
